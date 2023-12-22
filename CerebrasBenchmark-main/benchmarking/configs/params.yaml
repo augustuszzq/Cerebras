@@ -1,0 +1,40 @@
+eval_input:
+    batch_size: 12288    # Number of columns in the input. Small for vector-like, large for matrix-like
+    drop_last_batch: True
+    shuffle: False
+    n_samples: 147456 # Should be a multiple of batch size
+    dim: 12288 # number of rows
+
+model:
+    name: "benchmark"
+    mixed_precision: True # "Training on the Cerebras system without mixed precision is not supported."
+    dim_in: 12288   # Control the dimensions of the matrix. Presently must be square
+    dim_out: 12288
+    n_repeats: 20
+    n_matrices: 10
+    do_op: True
+    sparsity: 0.2 # Weight init sparsity
+    sparse_value: "NaN" # NaN or 0
+    sparse_mode: "random" # random, row, col
+
+# Comment this section out to disable sparsity
+sparsity:
+    sparsity: 0.2 # sparsity we tell the model zoo
+    init_method: "random"
+    seed: 1234
+
+runconfig:
+    max_steps: 1000 # Number of batches to process
+    checkpoint_steps: 0
+    log_steps: 1
+    seed: 1
+    save_losses: True
+    autogen_policy: "medium"
+
+# One of the ModelZoo functions requires these to exist
+train_input:
+    used: False
+
+optimizer:
+    used: False
+    learning_rate: 0.0
